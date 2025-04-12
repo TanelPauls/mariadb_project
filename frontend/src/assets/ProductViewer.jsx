@@ -95,7 +95,7 @@ export default function ProductViewer() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`http://localhost:3013${endpoint}`);
+      const res = await fetch(`${import.meta.env.VITE_BASE_URL}${endpoint}`);
       const json = await res.json();
 
       if (
@@ -127,7 +127,7 @@ export default function ProductViewer() {
     }
 
     try {
-      const res = await fetch(`http://localhost:3013/edit/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_BASE_URL}/edit/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ [key]: value }),
@@ -300,7 +300,9 @@ export default function ProductViewer() {
             );
             if (confirmed) {
               try {
-                const res = await fetch("http://localhost:3013/reset");
+                const res = await fetch(
+                  `${import.meta.env.VITE_BASE_URL}/reset`
+                );
                 const json = await res.json();
                 alert(json.message || "Andmebaas resetitud.");
                 window.location.reload(); // optional: refresh view
@@ -393,16 +395,19 @@ export default function ProductViewer() {
           <button
             onClick={async () => {
               try {
-                const res = await fetch("http://localhost:3013/applyDiscount", {
-                  method: "PATCH",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                    name: searchName,
-                    value: parseInt(searchPrice, 10),
-                  }),
-                });
+                const res = await fetch(
+                  `${import.meta.env.VITE_BASE_URL}/applyDiscount`,
+                  {
+                    method: "PATCH",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      name: searchName,
+                      value: parseInt(searchPrice, 10),
+                    }),
+                  }
+                );
                 const json = await res.json();
                 alert(json.message);
                 fetchData("/oldDiscounts");
